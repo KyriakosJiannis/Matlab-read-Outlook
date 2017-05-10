@@ -4,4 +4,4 @@ Author : Kyriakos Ioannis
 Matlab function which imports the 'readed' or 'unreaded' outlook emails from inbox or or its subfolders
 Extracts their subjects, bodies and can save their attachements.
 
-I call it ReadOutlook2007 as  I have not tested in other version. 
+ I have not been tested in other outlook version apart from 2007. 
