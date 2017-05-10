@@ -1,4 +1,4 @@
-function [Email]= ReadOutlook2007_v2(varargin)
+function [Email]= ReadOutlook2007(varargin)
 %  Scraping emails from Microsoft Outlook 2007
 %  Functionality which imports read or unread emails from inbox or 
 %  or its subfolders
