@@ -20,7 +20,6 @@ function [Email]= ReadOutlook(varargin)
 %                   else empty ''
 %       Mark      = 1,  marks UnRead emails as read, 
 %              else empty ''
-%  ReadOutlook2007(Folder,Subfolder,Savepath,Read,Mark)
 %--------------------------------------------------------------------------
 % Examples:
 % %     Reads all emails from a subfolder and save the attchments
