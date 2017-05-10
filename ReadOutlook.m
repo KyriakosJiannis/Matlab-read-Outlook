@@ -43,6 +43,7 @@ function [Email]= ReadOutlook(varargin)
 % %     Reads all Unread emails from your inbox
 %          mails = ReadOutlook(...
 %              'Read',1)
+% Author: Ioannis Kyriakos, kyriakos.giannis@gmail.com
 %--------------------------------------------------------------------------
 
 %% Function imports
