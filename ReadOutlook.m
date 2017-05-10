@@ -1,7 +1,7 @@
 function [Email]= ReadOutlook(varargin)
 %  Scraping emails from Microsoft Outlook 2007
-%  Functionality which imports read or unread emails from inbox or 
-%  or its subfolders
+%  Functionality which imports "readed" or "unreaded" emails from inbox or 
+%  or its sub-folders
 %  Extracts subjects, bodies and can save their attachements
 %  
 % It is able read emails 
