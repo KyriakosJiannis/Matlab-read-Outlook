@@ -1,57 +1,73 @@
 function [Email]= ReadOutlook(varargin)
-%  Scraping emails from Microsoft Outlook 2007
-%  Functionality which imports "readed" or "unreaded" emails from inbox or 
-%  or its sub-folders
-%  Extracts subjects, bodies and can save their attachements
+%  Scraping emails from Microsoft Outlook
+%  Functionality which imports readed, unreaded emails from inbox or 
+%  or outlook folders and subfolders
+%  Extracts their subjects, bodies and can save their attachements
 %  
-% It is able read emails 
+% It is able read emails
 %           from Inbox
 %                Inbox/Folder
 %                Inbox/Folder/Subfolder
 %
-% Inputs
-%    Basic import functionality
-%    Varargin: SQL style
+% Function Inputs
+%    Basic import functionality Varargin
 %    ------------------------------
 %       Folder    : outlook folder name
-%       Subfolder = outlook subfolder
+%       Subfolder = outlook subfolder name
 %       Savepath  = path to save the attachments
 %       Read      = 1,  reads only the UnRead emails, 
 %                   else empty ''
 %       Mark      = 1,  marks UnRead emails as read, 
-%              else empty ''
+%                   else empty ''
+%
+% Author: Ioannis Kyriakos, 
+%		kyriakos.giannis@gmail.com
 %--------------------------------------------------------------------------
 % Examples:
-% %     Reads all emails from a subfolder and save the attchments
+%
+% %     Reads all emails from your inbox
+%          mails = ReadOutlook
+%
+% %     Reads all Unread emails from your inbox
+%          mails = ReadOutlook('Read', 1)
+%
+% %     Reads all Unread emails from your inbox and mark them as read
+%          mails = ReadOutlook('Read', 1, 'Mark', 1)
+%
+% %     Reads all emails from a folder and save their attachments
+%         mails = ReadOutlook(...
+%             'Folder', 'Groups',...
+%             'Savepath', 'C:\matlab\data\test')
+%
+% %     Reads all emails from a subfolder and save the attachements
+%
 %         mails = ReadOutlook(...
 %             'Folder', 'Groups',...
 %             'Subfolder', 'News',...
 %             'Savepath', 'C:\matlab\data\test')
+%
 % %     Reads all unread emails from a subfolder        
+%
 %          mails = ReadOutlook(...
 %             'Folder', 'Groups',...
 %             'Subfolder', 'News',...
-%             'Read',1);        
-% %     Reads all unread emails from a subfolder and mark tham as read       
+%             'Read',1);
+%        
+% %     Reads all unread emails from a subfolder and mark tham as read
+%       
 %          mails = ReadOutlook(...
 %             'Folder', 'Groups',...
 %             'Subfolder', 'News',...
 %             'Read',1 , ...
 %             'Mark',1);                                  
-% %     Reads all emails from your inbox
-%          mails = ReadOutlook
-% %     Reads all Unread emails from your inbox
-%          mails = ReadOutlook(...
-%              'Read',1)
-% Author: Ioannis Kyriakos, kyriakos.giannis@gmail.com
 %--------------------------------------------------------------------------
 
-%% Function imports
+%% Function Inputs
 vargs = varargin;
 f = Function_Varargin(vargs);
 clearvars varargin vargs
 
-%% Connects to Outlook2007
+%% Connects to Outlook
 outlook = actxserver('Outlook.Application');
 mapi = outlook.GetNamespace('mapi');
 INBOX = mapi.GetDefaultFolder(6);
@@ -97,61 +113,61 @@ end
 
 %% download & read emails
 for i = 1:count
-    if f.Read == 1 %****only unreads emails
-        %inbox
+    if f.Read == 1 % only unreads emails
+        % inbox
         if isempty(f.Folder) && isempty(f.Subfolder)
             UnRead = INBOX.Items.Item(count+1-i).UnRead;
-        %folder
+        % folder
         elseif ~isempty(f.Folder) && isempty(f.Subfolder)
             UnRead = INBOX.Folders(1).Item(n).Items(1).Item(count+1-i).UnRead;
-        %subfolder
+        % subfolder
         elseif ~isempty(f.Folder) && ~isempty(f.Subfolder)
             UnRead = INBOX.Folders(1).Item(n).Folders(1).Item(s).Item(1).Item(count+1-i).UnRead;
         end
         
         if UnRead
-            %inbox
+            % inbox
             if isempty(f.Folder) && isempty(f.Subfolder)
                 if f.Mark == 1
                 INBOX.Items.Item(count+1-i).UnRead=0;
                 end
-                email=INBOX.Items.Item(count+1-i);
-                %folder
+                email = INBOX.Items.Item(count+1-i);
+                % folder
             elseif   ~isempty(f.Folder) && isempty(f.Subfolder)
-                if Mark==1
+                if Mark == 1
                 INBOX.Folders(1).Item(n).Items(1).Item(count+1-i).UnRead=0;
                 end
-                email=INBOX.Folders(1).Item(n).Items(1).Item(count+1-i);
-                %subfolder
+                email = INBOX.Folders(1).Item(n).Items(1).Item(count+1-i);
+                % subfolder
             elseif ~isempty(f.Folder) && ~isempty(f.Subfolder)
-                if f.Mark==1
+                if f.Mark == 1
                 INBOX.Folders(1).Item(n).Folders(1).Item(s).Item(1).Item(count+1-i).UnRead=0;
                 end
-                email=INBOX.Folders(1).Item(n).Folders(1).Item(s).Items.Item(count+1-i);
+                email = INBOX.Folders(1).Item(n).Folders(1).Item(s).Items.Item(count+1-i);
             end
         end
-    else   %****import all
-        %inbox
+    else   % all emails
+        % inbox
         if isempty(f.Folder) && isempty(f.Subfolder)
-            email=INBOX.Items.Item(count+1-i);
-            %folder
+            email = INBOX.Items.Item(count+1-i);
+            % folder
         elseif   ~isempty(f.Folder) && isempty(f.Subfolder)
-            email=INBOX.Folders(1).Item(n).Items(1).Item(count+1-i);
-            %subfolder
+            email = INBOX.Folders(1).Item(n).Items(1).Item(count+1-i);
+            % subfolder
         elseif ~isempty(f.Folder) && ~isempty(f.Subfolder)
-            email=INBOX.Folders(1).Item(n).Folders(1).Item(s).Items.Item(count+1-i);
+            email = INBOX.Folders(1).Item(n).Folders(1).Item(s).Items.Item(count+1-i);
         end
-        UnRead=1; %pseudo for next step
+        UnRead = 1; %pseudo for next step
     end
     if UnRead
         % read and save body
         subject = email.get('Subject');
         body = email.get('Body');
-        Email{i,1}=subject;
-        Email{i,2}=body;
+        Email{i,1} = subject;
+        Email{i,2} = body;
         if ~isempty(f.Savepath)
             attachments = email.get('Attachments');
-            if attachments.Count >=1
+            if attachments.Count >= 1
                 fname = attachments.Item(1).Filename;
                 full = [f.Savepath,'\',fname];
                 attachments.Item(1).SaveAsFile(full)
@@ -162,7 +178,7 @@ end
 Email(all(cellfun('isempty', Email),2),:)=[];
 end
 
-%% functions 
+%% functions --------------------------------------------------------------
 function f = Function_Varargin(vargs)
 % varargin as structure
 n = length(vargs);
@@ -200,3 +216,4 @@ else
     f.Mark = '';
 end
 end
+
